@@ -1,0 +1,339 @@
+<HomeScreenButton@Button>:
+    size_hint: 0.75, 0.1
+    font_size: min(self.height * 0.7, self.width * 1.7 / len(self.text)) if len(self.text) else self.height
+    halign: "center"
+    valign: "middle"
+    bold: True
+
+<CopyButton@Button>:
+    bold: True
+    size_hint: 0.24, 0.1
+    font_size: min(self.height * 0.7, self.width * 1.7 / len(self.text)) if len(self.text) else self.height
+    halign: "center"
+    valign: "middle"
+
+<GeneralPurposeButton@Button>:
+    size_hint: 0.5, 0.1
+    font_size: min(self.height * 0.7, self.width * 1.7 / len(self.text)) if len(self.text) else self.height
+    halign: "center"
+    valign: "middle"
+    bold: True
+
+<EntryButton@Button>:
+    size_hint: 0.5, 0.1
+    font_size: min(self.height * 0.7, self.width * 1.7 / len(self.text)) if len(self.text) else self.height
+    halign: "center"
+    valign: "middle"
+    bold: True
+
+<BackButton@Button>:
+    size_hint: 0.1, 0.1
+    pos_hint: {"x": 0.01, "y": 0.01}
+    text: "Back"
+    font_size: min(self.height * 0.7, self.width * 1.5 / len(self.text)) if len(self.text) else self.height
+    halign: "center"
+    valign: "middle"
+    bold: True
+
+<HomeButton@Button>:
+    size_hint: 0.1, 0.1
+    pos_hint: {"x": 0.89, "y": 0.01}
+    text: "Home"
+    font_size: min(self.height * 0.7, self.width * 1.3 / len(self.text)) if len(self.text) else self.height
+    halign: "center"
+    valign: "middle"
+    bold: True
+
+<EntryField@TextInput>:
+    multiline: "false"
+    size_hint: 0.5, 0.075
+    font_size: min(self.height * 0.6, self.width * 1.4 / len(self.text)) if len(self.text) else self.height
+    halign: "center"
+    valign: "top"
+
+<InfoLabel@Label>:
+    font_size: min(self.width * 0.05, self.height * 0.3)
+    halign: "center"
+    valign: "bottom"
+    bold: True
+
+<Button>:
+    background_normal: ""
+    background_color: 0, 1, 0.9, 0.4
+    border: [10, 10, 10, 10]
+
+<SwitchingScreen>:
+    canvas:
+        Color:
+            rgba: 0.45, 0.50, 0.50, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<HomeScreen>:
+    orientation: "vertical"
+    size: root.size
+    Label:
+        id: headerText
+        text: "Password Manager"
+        bold: True
+        font_size: min(self.width * 0.1, self.height * 0.6)
+        pos_hint: {"x": 0, "y": 0.10}
+    HomeScreenButton:
+        id: newAccountButton
+        text: "Add new account"
+        pos_hint: {"x": 0.125, "y": 0.35}
+        on_release: root.switchScreen("newAccount"), root.createEntry(), root.resetNewAccountScreen(), root.resetGeneratePasswordScreen()
+    HomeScreenButton:
+        id: existingAccountButton
+        text: "Find existing account"
+        pos_hint: {"x": 0.125, "y": 0.23}
+        on_release: root.switchScreen("existingAccount"), root.setExistingAccountScreen()
+    HomeScreenButton:
+        id: saveAndExitButton
+        text: "Save and Exit"
+        pos_hint: {"x": 0.125, "y": 0.11}
+        on_release: root.saveData(), root.killApp()
+
+<NewAccountScreen>:
+    orientation: "vertical"
+    size: root.size
+    BackButton:
+        on_release: root.switchScreen("home")
+    InfoLabel:
+        id: accountLabel
+        text: "Account"
+        pos_hint: {"x": 0, "y": 0.235}
+    EntryField:
+        id: accountEntry
+        pos_hint: {"x": 0.25, "y": 0.62}
+        on_text: root.setAccount(self.text)
+    InfoLabel:
+        id: loginLabel
+        text: "Login"
+        pos_hint: {"x": 0, "y": 0.085}
+    EntryField:
+        id: loginEntry
+        pos_hint: {"x": 0.25, "y": 0.47}
+        on_text: root.setLogin(self.text)
+    GeneralPurposeButton:
+        text: "Specifications"
+        halign: "center"
+        valign: "middle"
+        pos_hint: {"x": 0.25, "y": 0.32}
+        on_release: root.switchScreen("specifications"), root.setPreviousScreen()
+    GeneralPurposeButton:
+        text: "Generate Password"
+        halign: "center"
+        valign: "middle"
+        pos_hint: {"x": 0.25, "y": 0.20}
+        on_release: root.attemptSwitchScreen("generatePassword"), root.setPassword(), root.setGeneratePasswordScreen()
+    HomeButton:
+        on_release: root.switchScreen("home")
+
+<ExistingAccountScreen>:
+    orientation: "vertical"
+    size: root.size
+    BackButton:
+        on_release: root.switchScreen("home")
+    EntryButton:
+        id: entry0
+        pos_hint: {"x": 0.25, "y": 0.73}
+        on_release: root.attemptSwitchScreen("entryDetails", 0), root.showEntryDetails(0)
+    EntryButton:
+        id: entry1
+        pos_hint: {"x": 0.25, "y": 0.61}
+        on_release: root.attemptSwitchScreen("entryDetails", 1), root.showEntryDetails(1)
+    EntryButton:
+        id: entry2
+        pos_hint: {"x": 0.25, "y": 0.49}
+        on_release: root.attemptSwitchScreen("entryDetails", 2), root.showEntryDetails(2)
+    EntryButton:
+        id: entry3
+        pos_hint: {"x": 0.25, "y": 0.37}
+        on_release: root.attemptSwitchScreen("entryDetails", 3), root.showEntryDetails(3)
+    EntryButton:
+        id: entry4
+        pos_hint: {"x": 0.25, "y": 0.25}
+        on_release: root.attemptSwitchScreen("entryDetails", 4), root.showEntryDetails(4)
+    GeneralPurposeButton:
+        id: up
+        text: "Up"
+        pos_hint: {"x": 0.375, "y": 0.85}
+        size_hint: 0.25, 0.1
+        on_release: root.upButton()
+    GeneralPurposeButton:
+        id: down
+        text: "Down"
+        pos_hint: {"x": 0.375, "y": 0.13}
+        size_hint: 0.25, 0.1
+        on_release: root.downButton(), root.showAllButtonText()
+    HomeButton:
+        on_release: root.switchScreen("home")
+
+<SpecificationsScreen>:
+    orientation: "vertical"
+    size: root.size
+    BackButton:
+        on_release: root.switchScreen("newAccount")
+    HomeButton:
+        on_release: root.switchScreen("home")
+    InfoLabel:
+        id: lengthLabel
+        text: "Length"
+        pos_hint: {"x": 0, "y": 0.40}
+    EntryField:
+        id: lengthEntry
+        pos_hint: {"x": 0.25, "y": 0.79}
+        on_text: root.setLength(self.text)
+    InfoLabel:
+        id: capitalsLabel
+        text: "Capitals"
+        pos_hint: {"x": 0, "y": 0.23}
+    EntryField:
+        id: capitalsEntry
+        pos_hint: {"x": 0.25, "y": 0.62}
+        on_text: root.setCapitals(self.text)
+    InfoLabel:
+        id: specialsLabel
+        text: "Special Characters"
+        pos_hint: {"x": 0, "y": 0.06}
+    EntryField:
+        id: specialsEntry
+        pos_hint: {"x": 0.25, "y": 0.45}
+        on_text: root.setSpecials(self.text)
+    InfoLabel:
+        id: numbersLabel
+        text: "Numbers"
+        pos_hint: {"x": 0, "y": -0.11}
+    EntryField:
+        id: numbersEntry
+        pos_hint: {"x": 0.25, "y": 0.28}
+        on_text: root.setNumbers(self.text)
+    GeneralPurposeButton:
+        text: "Confirm"
+        halign: "center"
+        valign: "middle"
+        pos_hint: {"x": 0.25, "y": 0.15}
+        on_release: root.switchScreenPrevious()
+
+<GeneratePasswordScreen>:
+    orientation: "vertical"
+    size: root.size
+    BackButton:
+        on_release: root.switchScreen("newAccount")
+    HomeButton:
+        on_release: root.switchScreen("home")
+    InfoLabel:
+        id: accountLabel
+        text: "Account"
+        pos_hint: {"x": 0, "y": 0.3}
+    InfoLabel:
+        id: loginLabel
+        text: "Login"
+        pos_hint: {"x": 0, "y": 0.2}
+    InfoLabel:
+        id: passwordLabel
+        text: "Password"
+        pos_hint: {"x": 0, "y": 0.1}
+    CopyButton:
+        id: copyLogin
+        text: "Copy Login"
+        pos_hint: {"x": 0.25, "y": 0.39}
+        on_release: root.copyLogin(loginLabel.text)
+    CopyButton:
+        id: copyPassword
+        text: "Copy Password"
+        pos_hint: {"x": 0.51, "y": 0.39}
+        on_release: root.copyPassword(passwordLabel.text)
+    GeneralPurposeButton:
+        id: editInfo
+        text: "Edit Info"
+        pos_hint: {"x": 0.25, "y": 0.27}
+        on_release: root.switchScreen("newAccount"), root.resetPage()
+    GeneralPurposeButton:
+        id: saveAccount
+        text: "Save Account"
+        pos_hint: {"x": 0.25, "y": 0.15}
+        on_release: root.showInfo(), root.storeEntry(), root.switchScreen("home")
+
+<EntryDetailsScreen>:
+    orientation: "vertical"
+    size: root.size
+    InfoLabel:
+        id: account
+        pos_hint: {"x": 0, "y": 0.3}
+    InfoLabel:
+        id: login
+        pos_hint: {"x": 0, "y": 0.2}
+    InfoLabel:
+        id: password
+        pos_hint: {"x": 0, "y": 0.1}
+    GeneralPurposeButton:
+        id: edit
+        text: "Edit entry"
+        pos_hint: {"x": 0.25, "y": 0.27}
+        on_release: root.switchScreen("editEntry"), root.setEditEntryScreen()
+    GeneralPurposeButton:
+        id: delete
+        text: "Delete entry"
+        pos_hint: {"x": 0.25, "y": 0.15}
+        on_release: root.switchScreen("existingAccount"), root.deleteEntry(), root.setExistingAccountScreen()
+    CopyButton:
+        id: copyLogin
+        text: "Copy Login"
+        pos_hint: {"x": 0.25, "y": 0.39}
+        on_release: root.copyLogin(login.text)
+    CopyButton:
+        id: copyPassword
+        text: "Copy Password"
+        pos_hint: {"x": 0.51, "y": 0.39}
+        on_release: root.copyPassword(password.text)
+    BackButton:
+        on_release: root.switchScreen("existingAccount"), root.setExistingAccountScreen()
+    HomeButton:
+        on_release: root.switchScreen("home")
+
+<EditEntryScreen>:
+    orientation: "vertical"
+    size: root.size
+    InfoLabel:
+        id: accountLabel
+        text: "Account"
+        pos_hint: {"x": 0, "y": 0.335}
+    EntryField:
+        id: accountEntry
+        pos_hint: {"x": 0.25, "y": 0.72}
+    InfoLabel:
+        id: loginLabel
+        text: "Login"
+        pos_hint: {"x": 0, "y": 0.185}
+    EntryField:
+        id: loginEntry
+        pos_hint: {"x": 0.25, "y": 0.57}
+    InfoLabel:
+        id: passwordLabel
+        text: "Password"
+        pos_hint: {"x": 0, "y": 0.035}
+    EntryField:
+        id: passwordEntry
+        pos_hint: {"x": 0.25, "y": 0.42}
+    GeneralPurposeButton:
+        id: passwordSpecs
+        text: "Password Specifications"
+        pos_hint: {"x": 0.25, "y": 0.27}
+        on_release: root.switchScreen("specifications"), root.setPreviousScreen()
+    GeneralPurposeButton:
+        id: generatePassword
+        text: "Generate Password"
+        pos_hint: {"x": 0.25, "y": 0.15}
+        on_release: passwordEntry.text = root.generatePassword()
+    GeneralPurposeButton:
+        id: confirm
+        text: "Confirm"
+        pos_hint: {"x": 0.25, "y": 0.03}
+        on_release: root.updateEntry(accountEntry.text, loginEntry.text, passwordEntry.text), root.switchScreen("entryDetails")#, root.updateEntryDetailsScreen()
+    BackButton:
+        on_release: root.switchScreen("entryDetails")
+    HomeButton:
+        on_release: root.switchScreen("home")
